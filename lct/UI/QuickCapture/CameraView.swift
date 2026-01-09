@@ -8,10 +8,11 @@
 import SwiftUI
 import UIKit
 import Photos
+import CoreLocation
 
 struct CameraView: UIViewControllerRepresentable {
     var onClose: () -> Void
-    var onImageCaptured: (UIImage) -> Void
+    var onImageCaptured: (UIImage, CLLocation?) -> Void
     var onOpenGallery: () -> Void
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -72,7 +73,8 @@ struct CameraView: UIViewControllerRepresentable {
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
         ) {
             if let image = info[.originalImage] as? UIImage {
-                parent.onImageCaptured(image)
+                let location = PhotoLocationExtractor.extractFromPickerInfo(info)
+                parent.onImageCaptured(image, location)
             }
             // Don't dismiss - let the flow transition to description screen
         }

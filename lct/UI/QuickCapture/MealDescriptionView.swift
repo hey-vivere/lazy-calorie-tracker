@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct MealDescriptionView: View {
     let image: UIImage
+    let location: CLLocation?
     @Binding var isPresented: Bool
 
     @EnvironmentObject private var mealsStore: MealsStore
@@ -113,7 +115,8 @@ struct MealDescriptionView: View {
         Task {
             await mealsStore.submitQuickCapture(
                 image: image,
-                notes: description.isEmpty ? nil : description
+                notes: description.isEmpty ? nil : description,
+                location: location
             )
             withAnimation(.easeInOut(duration: 0.3)) {
                 isPresented = false
@@ -125,6 +128,7 @@ struct MealDescriptionView: View {
 #Preview {
     MealDescriptionView(
         image: UIImage(systemName: "photo")!,
+        location: nil,
         isPresented: .constant(true)
     )
     .environmentObject(MealsStore.mock)

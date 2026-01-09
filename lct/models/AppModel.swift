@@ -39,7 +39,7 @@ final class MealsStore: ObservableObject {
     }
 
     @MainActor
-    func submitQuickCapture(image: UIImage, notes: String?) async {
+    func submitQuickCapture(image: UIImage, notes: String?, location: CLLocation? = nil) async {
         let id = UUID().uuidString
         let capturedAt = Date()
         let mealTime = ISO8601DateFormatter().string(from: capturedAt)
@@ -55,7 +55,10 @@ final class MealsStore: ObservableObject {
                 localPhotoPath: nil,
                 userNotes: notes,
                 status: .failed,
-                errorMessage: "Could not save photo"
+                errorMessage: "Could not save photo",
+                latitude: location?.coordinate.latitude,
+                longitude: location?.coordinate.longitude,
+                source: .camera
             )
             add(failedMeal)
             return
@@ -71,7 +74,10 @@ final class MealsStore: ObservableObject {
             localPhotoPath: localPath,
             userNotes: notes,
             status: .pending,
-            errorMessage: nil
+            errorMessage: nil,
+            latitude: location?.coordinate.latitude,
+            longitude: location?.coordinate.longitude,
+            source: .camera
         )
         add(pendingMeal)
 

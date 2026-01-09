@@ -7,19 +7,27 @@
 
 import SwiftUI
 import PhotosUI
+import CoreLocation
 
 struct QuickCaptureFlow: View {
     @Binding var isPresented: Bool
 
     @State private var capturedImage: UIImage?
+    @State private var capturedLocation: CLLocation?
     @State private var showGalleryPicker = false
     @State private var selectedItem: PhotosPickerItem?
     @State private var cameraAvailable = UIImagePickerController.isSourceTypeAvailable(.camera)
 
+    @StateObject private var locationService = LocationService()
+
     var body: some View {
         Group {
             if let image = capturedImage {
-                MealDescriptionView(image: image, isPresented: $isPresented)
+                MealDescriptionView(
+                    image: image,
+                    location: capturedLocation ?? locationService.currentLocation,
+                    isPresented: $isPresented
+                )
             } else if cameraAvailable {
                 CameraView(
                     onClose: {
@@ -27,8 +35,9 @@ struct QuickCaptureFlow: View {
                             isPresented = false
                         }
                     },
-                    onImageCaptured: { image in
+                    onImageCaptured: { image, location in
                         capturedImage = image
+                        capturedLocation = location
                     },
                     onOpenGallery: {
                         showGalleryPicker = true
@@ -51,10 +60,20 @@ struct QuickCaptureFlow: View {
             Task {
                 if let data = try? await newItem?.loadTransferable(type: Data.self),
                    let image = UIImage(data: data) {
+                    // Extract location from photo EXIF data
+                    let location = PhotoLocationExtractor.extractFromImageData(data)
                     capturedImage = image
+                    capturedLocation = location
                     showGalleryPicker = false
                 }
             }
+        }
+        .onAppear {
+            locationService.requestWhenInUseAuthorization()
+            locationService.startUpdatingLocation()
+        }
+        .onDisappear {
+            locationService.stopUpdatingLocation()
         }
     }
 }
