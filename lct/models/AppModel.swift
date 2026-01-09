@@ -111,7 +111,10 @@ final class MealsStore: ObservableObject {
             localPhotoPath: old.localPhotoPath,
             userNotes: old.userNotes,
             status: status,
-            errorMessage: old.errorMessage
+            errorMessage: old.errorMessage,
+            latitude: old.latitude,
+            longitude: old.longitude,
+            source: old.source
         )
     }
 
@@ -128,7 +131,10 @@ final class MealsStore: ObservableObject {
             localPhotoPath: old.localPhotoPath,
             userNotes: old.userNotes,
             status: status,
-            errorMessage: nil
+            errorMessage: nil,
+            latitude: old.latitude,
+            longitude: old.longitude,
+            source: old.source
         )
     }
 
@@ -145,7 +151,10 @@ final class MealsStore: ObservableObject {
             localPhotoPath: old.localPhotoPath,
             userNotes: old.userNotes,
             status: .failed,
-            errorMessage: error
+            errorMessage: error,
+            latitude: old.latitude,
+            longitude: old.longitude,
+            source: old.source
         )
     }
 

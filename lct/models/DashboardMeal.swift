@@ -14,6 +14,13 @@ enum MealStatus: String, Codable {
     case failed
 }
 
+enum MealSource: String, Codable {
+    case camera
+    case locationSuggestion
+    case searchHistory
+    case manual
+}
+
 enum ImageSource: Hashable {
     case local(String)
     case remote(String)
@@ -31,6 +38,9 @@ struct DashboardMeal: Identifiable, Codable, Hashable {
     let userNotes: String?
     let status: MealStatus
     let errorMessage: String?
+    let latitude: Double?
+    let longitude: Double?
+    let source: MealSource
 
     var displayImageSource: ImageSource {
         if let localPath = localPhotoPath {
@@ -65,7 +75,10 @@ struct DashboardMeal: Identifiable, Codable, Hashable {
         localPhotoPath: String? = nil,
         userNotes: String? = nil,
         status: MealStatus = .completed,
-        errorMessage: String? = nil
+        errorMessage: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
+        source: MealSource = .camera
     ) {
         self.id = id
         self.templateId = templateId
@@ -77,6 +90,9 @@ struct DashboardMeal: Identifiable, Codable, Hashable {
         self.userNotes = userNotes
         self.status = status
         self.errorMessage = errorMessage
+        self.latitude = latitude
+        self.longitude = longitude
+        self.source = source
     }
 }
 
