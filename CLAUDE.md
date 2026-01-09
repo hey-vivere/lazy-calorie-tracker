@@ -6,6 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 LCT is an iOS calorie/meal tracking app built with SwiftUI. Users can log meals, view daily calorie progress, and manage their nutrition intake.
 
+## Assumptions to make
+- App is never going to guarantee that all data is perfectly accurate, the goal is to have good enough solution but super easy to use
+- App is not for fitness junkies, its for normal people who just need to start
+- App has to look beautiful, but stay minimal
+
+## Code Preferences
+- Always make sure to use newest apple documentation for design choices and for ui elements to use
+- Always assume app is built only for newest ios, no need to support lower versions
+- Try not to use deprecated things unless absolutely necessary
+
 ## Build Commands
 
 ```bash
