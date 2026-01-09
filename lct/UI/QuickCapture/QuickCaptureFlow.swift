@@ -37,49 +37,17 @@ struct QuickCaptureFlow: View {
                 }
             }
         }
-        .sheet(isPresented: $showGalleryPicker) {
-            GalleryPickerView(selectedItem: $selectedItem)
-        }
+        .photosPicker(
+            isPresented: $showGalleryPicker,
+            selection: $selectedItem,
+            matching: .images
+        )
         .onChange(of: selectedItem) { _, newItem in
             Task {
                 if let data = try? await newItem?.loadTransferable(type: Data.self),
                    let image = UIImage(data: data) {
                     capturedImage = image
                     showGalleryPicker = false
-                }
-            }
-        }
-    }
-}
-
-// Simple wrapper for PhotosPicker that presents as a sheet
-struct GalleryPickerView: View {
-    @Environment(\.dismiss) private var dismiss
-    @Binding var selectedItem: PhotosPickerItem?
-
-    var body: some View {
-        NavigationStack {
-            PhotosPicker(
-                selection: $selectedItem,
-                matching: .images,
-                photoLibrary: .shared()
-            ) {
-                VStack(spacing: 20) {
-                    Image(systemName: "photo.on.rectangle")
-                        .font(.system(size: 60))
-                        .foregroundColor(.blue)
-                    Text("Tap to select a photo")
-                        .font(.headline)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .navigationTitle("Photo Library")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
                 }
             }
         }
