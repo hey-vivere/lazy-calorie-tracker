@@ -257,6 +257,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "LCT needs access to your camera to take photos of your meals for calorie tracking.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "LCT uses your location to suggest meals you've had nearby.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LCT needs access to your photo library to select meal photos for calorie tracking.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -291,6 +292,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "LCT needs access to your camera to take photos of your meals for calorie tracking.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "LCT uses your location to suggest meals you've had nearby.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LCT needs access to your photo library to select meal photos for calorie tracking.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
