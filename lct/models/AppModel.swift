@@ -74,7 +74,10 @@ final class MealsStore: ObservableObject {
         )
         add(pendingMeal)
 
-        await processMeal(id: id, image: image, notes: notes, localPath: localPath, capturedAt: capturedAt)
+        // Fire off processing in background - don't await, return immediately
+        Task {
+            await processMeal(id: id, image: image, notes: notes, localPath: localPath, capturedAt: capturedAt)
+        }
     }
 
     @MainActor

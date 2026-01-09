@@ -14,6 +14,7 @@ struct MealDescriptionView: View {
     @EnvironmentObject private var mealsStore: MealsStore
 
     @State private var description: String = ""
+    @State private var isSubmitting: Bool = false
     @FocusState private var isTextFieldFocused: Bool
 
     private let suggestions = ["ate half", "extra large", "with sauce", "no dressing", "fried", "grilled"]
@@ -66,16 +67,22 @@ struct MealDescriptionView: View {
                         submitMeal()
                     } label: {
                         HStack {
-                            Image(systemName: "paperplane.fill")
-                            Text("Log Meal")
+                            if isSubmitting {
+                                ProgressView()
+                                    .tint(.white)
+                            } else {
+                                Image(systemName: "paperplane.fill")
+                            }
+                            Text(isSubmitting ? "Logging..." : "Log Meal")
                         }
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
-                        .background(Color.blue)
+                        .background(isSubmitting ? Color.gray : Color.blue)
                         .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
+                    .disabled(isSubmitting)
                 }
                 .padding(20)
             }
@@ -91,6 +98,7 @@ struct MealDescriptionView: View {
                     Button("Skip") {
                         submitMeal()
                     }
+                    .disabled(isSubmitting)
                 }
             }
             .onAppear {
@@ -100,6 +108,9 @@ struct MealDescriptionView: View {
     }
 
     private func submitMeal() {
+        guard !isSubmitting else { return }
+        isSubmitting = true
+
         Task {
             await mealsStore.submitQuickCapture(
                 image: image,

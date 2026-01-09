@@ -72,9 +72,14 @@ struct PhotoCaptureView: View {
                 }
             }
             .fullScreenCover(isPresented: $showCamera) {
-                CameraView { image in
-                    onImageCaptured(image)
-                }
+                CameraView(
+                    onImageCaptured: { image in
+                        onImageCaptured(image)
+                    },
+                    onOpenGallery: {
+                        // Gallery is already available on this screen, do nothing
+                    }
+                )
             }
             .onChange(of: selectedItem) { _, newItem in
                 Task {
