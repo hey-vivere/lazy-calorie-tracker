@@ -22,6 +22,11 @@ struct QuickCaptureFlow: View {
                 MealDescriptionView(image: image, isPresented: $isPresented)
             } else if cameraAvailable {
                 CameraView(
+                    onClose: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isPresented = false
+                        }
+                    },
                     onImageCaptured: { image in
                         capturedImage = image
                     },

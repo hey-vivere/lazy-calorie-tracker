@@ -9,8 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject private var mealsStore: MealsStore
-
-    @State private var showQuickCapture = false
+    @Binding var showQuickCapture: Bool
 
     private let swipeThreshold: CGFloat = 100
 
@@ -32,16 +31,14 @@ struct DashboardView: View {
             DragGesture()
                 .onEnded { value in
                     if value.translation.width > swipeThreshold {
-                        showQuickCapture = true
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            showQuickCapture = true
+                        }
                     }
                 }
         )
         .ignoresSafeArea(edges: .bottom)
         .navigationBarHidden(true)
-        .fullScreenCover(isPresented: $showQuickCapture) {
-            QuickCaptureFlow(isPresented: $showQuickCapture)
-                .environmentObject(mealsStore)
-        }
     }
 
     private var totalCalories: Int {
@@ -53,6 +50,6 @@ struct DashboardView: View {
 }
 
 #Preview {
-    DashboardView()
+    DashboardView(showQuickCapture: .constant(false))
         .environmentObject(MealsStore.mock)
 }

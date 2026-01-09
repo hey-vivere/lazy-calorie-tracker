@@ -94,7 +94,9 @@ struct MealDescriptionView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        isPresented = false
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isPresented = false
+                        }
                     }
                 }
             }
@@ -113,7 +115,9 @@ struct MealDescriptionView: View {
                 image: image,
                 notes: description.isEmpty ? nil : description
             )
-            isPresented = false
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isPresented = false
+            }
         }
     }
 }
