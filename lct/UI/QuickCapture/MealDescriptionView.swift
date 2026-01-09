@@ -22,11 +22,14 @@ struct MealDescriptionView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 240)
-                    .clipped()
+                GeometryReader { geo in
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .clipped()
+                }
+                .frame(height: UIScreen.main.bounds.height * 0.45)
 
                 VStack(spacing: 20) {
                     VStack(alignment: .leading, spacing: 8) {
@@ -93,12 +96,6 @@ struct MealDescriptionView: View {
                     Button("Cancel") {
                         isPresented = false
                     }
-                }
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Skip") {
-                        submitMeal()
-                    }
-                    .disabled(isSubmitting)
                 }
             }
             .onAppear {
