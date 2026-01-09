@@ -45,6 +45,13 @@ struct CameraView: UIViewControllerRepresentable {
 
         picker.cameraOverlayView = overlayView
 
+        // Scale camera preview to fill screen (camera is 4:3, screen is taller)
+        let screenSize = screenBounds.size
+        let cameraAspectRatio: CGFloat = 4.0 / 3.0
+        let previewHeight = screenSize.width * cameraAspectRatio
+        let scale = screenSize.height / previewHeight
+        picker.cameraViewTransform = CGAffineTransform(scaleX: scale, y: scale)
+
         return picker
     }
 
@@ -68,7 +75,7 @@ struct CameraView: UIViewControllerRepresentable {
             if let image = info[.originalImage] as? UIImage {
                 parent.onImageCaptured(image)
             }
-            parent.dismiss()
+            // Don't dismiss - let the flow transition to description screen
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
