@@ -37,10 +37,7 @@ struct CameraView: UIViewControllerRepresentable {
             dismissAction()
         }
         overlayView.onGallery = {
-            dismissAction()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                galleryAction()
-            }
+            galleryAction()
         }
 
         // Fetch recent photo for thumbnail
