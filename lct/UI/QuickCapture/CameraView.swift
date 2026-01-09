@@ -10,8 +10,7 @@ import UIKit
 import Photos
 
 struct CameraView: UIViewControllerRepresentable {
-    @Environment(\.dismiss) private var dismiss
-
+    var onClose: () -> Void
     var onImageCaptured: (UIImage) -> Void
     var onOpenGallery: () -> Void
 
@@ -27,14 +26,14 @@ struct CameraView: UIViewControllerRepresentable {
         let overlayView = CameraOverlayView(frame: screenBounds)
 
         // Capture callbacks
-        let dismissAction = dismiss
+        let closeAction = onClose
         let galleryAction = onOpenGallery
 
         overlayView.onCapture = { [weak picker] in
             picker?.takePicture()
         }
         overlayView.onClose = {
-            dismissAction()
+            closeAction()
         }
         overlayView.onGallery = {
             galleryAction()
@@ -79,7 +78,7 @@ struct CameraView: UIViewControllerRepresentable {
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            parent.dismiss()
+            parent.onClose()
         }
     }
 }

@@ -67,12 +67,17 @@ struct PhotoCaptureView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        dismiss()
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            dismiss()
+                        }
                     }
                 }
             }
             .fullScreenCover(isPresented: $showCamera) {
                 CameraView(
+                    onClose: {
+                        showCamera = false
+                    },
                     onImageCaptured: { image in
                         onImageCaptured(image)
                     },
