@@ -27,8 +27,13 @@ struct MealsListView: View {
                     List {
                         ForEach(mealsStore.meals) { meal in
                             NavigationLink(value: meal) {
-                                MealRowView(meal: meal)
+                                MealRowView(meal: meal) {
+                                    Task {
+                                        await mealsStore.retryEstimation(for: meal.id)
+                                    }
+                                }
                             }
+                            .deleteDisabled(meal.isPending)
                         }
                         .onDelete(perform: deleteMeal)
                     }
