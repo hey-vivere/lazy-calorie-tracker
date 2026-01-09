@@ -209,6 +209,31 @@ final class MealsStore: ObservableObject {
         )
         add(meal)
     }
+
+    // MARK: - Quick Add from Template
+
+    @MainActor
+    func quickAddFromTemplate(_ template: MealTemplate, at location: CLLocation?, source: MealSource) {
+        let id = UUID().uuidString
+        let mealTime = ISO8601DateFormatter().string(from: Date())
+
+        let meal = DashboardMeal(
+            id: id,
+            templateId: template.id,
+            templateName: template.name,
+            calories: template.averageCalories,
+            mealTime: mealTime,
+            photoURL: template.photoURL,
+            localPhotoPath: template.lastPhotoPath,
+            userNotes: nil,
+            status: .completed,
+            errorMessage: nil,
+            latitude: location?.coordinate.latitude,
+            longitude: location?.coordinate.longitude,
+            source: source
+        )
+        add(meal)
+    }
 }
 
 extension MealsStore {
