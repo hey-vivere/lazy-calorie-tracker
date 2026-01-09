@@ -67,30 +67,19 @@ enum BlobColors {
 
     // MARK: - Helpers
 
-    /// Linear interpolation between two colors
+    /// Linear interpolation between two colors using SwiftUI's native Color.resolve API
     private static func interpolate(from: Color, to: Color, t: Double) -> Color {
-        let t = max(0, min(1, t))  // Clamp to 0-1
+        let t = Float(max(0, min(1, t)))  // Clamp to 0-1
 
-        // Resolve colors in sRGB
-        let fromResolved = UIColor(from).cgColor.components ?? [0, 0, 0, 1]
-        let toResolved = UIColor(to).cgColor.components ?? [0, 0, 0, 1]
-
-        // Handle grayscale colors (2 components) vs RGB (4 components)
-        let fromR = fromResolved.count >= 3 ? fromResolved[0] : fromResolved[0]
-        let fromG = fromResolved.count >= 3 ? fromResolved[1] : fromResolved[0]
-        let fromB = fromResolved.count >= 3 ? fromResolved[2] : fromResolved[0]
-        let fromA = fromResolved.count >= 4 ? fromResolved[3] : (fromResolved.count >= 2 ? fromResolved[1] : 1)
-
-        let toR = toResolved.count >= 3 ? toResolved[0] : toResolved[0]
-        let toG = toResolved.count >= 3 ? toResolved[1] : toResolved[0]
-        let toB = toResolved.count >= 3 ? toResolved[2] : toResolved[0]
-        let toA = toResolved.count >= 4 ? toResolved[3] : (toResolved.count >= 2 ? toResolved[1] : 1)
+        // Use SwiftUI's native color resolution (iOS 17+)
+        let fromResolved = from.resolve(in: EnvironmentValues())
+        let toResolved = to.resolve(in: EnvironmentValues())
 
         return Color(
-            red: fromR + (toR - fromR) * t,
-            green: fromG + (toG - fromG) * t,
-            blue: fromB + (toB - fromB) * t,
-            opacity: fromA + (toA - fromA) * t
+            red: Double(fromResolved.red + (toResolved.red - fromResolved.red) * t),
+            green: Double(fromResolved.green + (toResolved.green - fromResolved.green) * t),
+            blue: Double(fromResolved.blue + (toResolved.blue - fromResolved.blue) * t),
+            opacity: Double(fromResolved.opacity + (toResolved.opacity - fromResolved.opacity) * t)
         )
     }
 }
