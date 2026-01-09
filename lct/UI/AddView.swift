@@ -9,21 +9,54 @@ import SwiftUI
 
 struct AddView: View {
     @EnvironmentObject private var mealsStore: MealsStore
-    
+
+    @State private var showManualEntry = false
+
     var body: some View {
-        Button("Save") {
-            mealsStore.add(DashboardMeal(
-                id: UUID().uuidString,
-                templateId: UUID().uuidString,
-                templateName: "Ho ho",
-                calories: 480,
-                mealTime: "2025-10-20T09:30:00Z",
-                photoURL: "https://picsum.photos/200/201"
-            ))
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 24) {
+                    quickActionsSection
+                }
+                .padding()
+            }
+            .navigationTitle("Add Meal")
+            .sheet(isPresented: $showManualEntry) {
+                ManualEntryView()
+            }
+        }
+    }
+
+    // MARK: - Sections
+
+    @ViewBuilder
+    private var quickActionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Log a meal")
+                .font(.headline)
+                .foregroundColor(.secondary)
+
+            Button {
+                showManualEntry = true
+            } label: {
+                VStack(spacing: 8) {
+                    Image(systemName: "pencil.line")
+                        .font(.system(size: 28))
+                    Text("Manual")
+                        .font(.subheadline)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 100)
+                .background(Color.green.opacity(0.1))
+                .foregroundColor(.green)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+            .buttonStyle(.plain)
         }
     }
 }
 
 #Preview {
     AddView()
+        .environmentObject(MealsStore())
 }

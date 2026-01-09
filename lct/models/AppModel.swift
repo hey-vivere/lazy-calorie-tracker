@@ -8,6 +8,7 @@ import Foundation
 import Combine
 import SwiftUI
 import UIKit
+import CoreLocation
 
 final class MealsStore: ObservableObject {
 
@@ -171,6 +172,36 @@ final class MealsStore: ObservableObject {
             localPath: localPath,
             capturedAt: ISO8601DateFormatter().date(from: meal.mealTime) ?? Date()
         )
+    }
+
+    // MARK: - Manual Entry
+
+    @MainActor
+    func addManualMeal(name: String, calories: Int, image: UIImage?, at location: CLLocation?) {
+        let id = UUID().uuidString
+        let mealTime = ISO8601DateFormatter().string(from: Date())
+
+        var localPath: String? = nil
+        if let image = image {
+            localPath = try? photoStorage.save(image: image, withId: id)
+        }
+
+        let meal = DashboardMeal(
+            id: id,
+            templateId: UUID().uuidString,
+            templateName: name,
+            calories: calories,
+            mealTime: mealTime,
+            photoURL: nil,
+            localPhotoPath: localPath,
+            userNotes: nil,
+            status: .completed,
+            errorMessage: nil,
+            latitude: location?.coordinate.latitude,
+            longitude: location?.coordinate.longitude,
+            source: .manual
+        )
+        add(meal)
     }
 }
 
