@@ -11,6 +11,7 @@ struct AddView: View {
     @EnvironmentObject private var mealsStore: MealsStore
 
     @State private var showManualEntry = false
+    @State private var showCamera = false
 
     var body: some View {
         NavigationStack {
@@ -24,6 +25,9 @@ struct AddView: View {
             .sheet(isPresented: $showManualEntry) {
                 ManualEntryView()
             }
+            .fullScreenCover(isPresented: $showCamera) {
+                QuickCaptureFlow(isPresented: $showCamera)
+            }
         }
     }
 
@@ -36,22 +40,43 @@ struct AddView: View {
                 .font(.headline)
                 .foregroundColor(.secondary)
 
-            Button {
-                showManualEntry = true
-            } label: {
-                VStack(spacing: 8) {
-                    Image(systemName: "pencil.line")
-                        .font(.system(size: 28))
-                    Text("Manual")
-                        .font(.subheadline)
+            HStack(spacing: 16) {
+                // Camera Button
+                Button {
+                    showCamera = true
+                } label: {
+                    VStack(spacing: 8) {
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 28))
+                        Text("Camera")
+                            .font(.subheadline)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 100)
+                    .background(Color.blue.opacity(0.1))
+                    .foregroundColor(.blue)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 100)
-                .background(Color.green.opacity(0.1))
-                .foregroundColor(.green)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .buttonStyle(.plain)
+
+                // Manual Button
+                Button {
+                    showManualEntry = true
+                } label: {
+                    VStack(spacing: 8) {
+                        Image(systemName: "pencil.line")
+                            .font(.system(size: 28))
+                        Text("Manual")
+                            .font(.subheadline)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 100)
+                    .background(Color.green.opacity(0.1))
+                    .foregroundColor(.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         }
     }
 }

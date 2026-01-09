@@ -78,7 +78,7 @@ struct PhotoCaptureView: View {
                     onClose: {
                         showCamera = false
                     },
-                    onImageCaptured: { image in
+                    onImageCaptured: { image, _ in
                         onImageCaptured(image)
                     },
                     onOpenGallery: {
